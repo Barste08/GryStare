@@ -1,42 +1,41 @@
-// Ścieżka do pliku FireRed.gba w Twoim repozytorium GitHub
-const romUrl = 'FireRed.gba'; // lub 'roms/FireRed.gba' jeśli plik jest w podfolderze
+// Ścieżka do Twojej gry w repozytorium GitHub Pages
+const romUrl = 'FireRed.gba';
 
-const loadingStatus = document.getElementById('loading-status');
-const startBtn = document.getElementById('start-btn');
-
-let romData = null;
-
-// Pobieranie pliku ROM z serwera (GitHub Pages)
-fetch(romUrl)
-    .then(response => {
-        if (!response.ok) {
-            throw new Error(`Nie udało się pobrać pliku gry (status: ${response.status})`);
-        }
-        return response.arrayBuffer();
-    })
-    .then(buffer => {
-        romData = buffer;
-        loadingStatus.textContent = 'Gra została pobrana pomyślnie!';
-        loadingStatus.style.color = 'green';
+async function initEmulator() {
+    try {
+        console.log("Pobieranie ROM-u...");
+        const response = await fetch(romUrl);
         
-        startBtn.textContent = 'Uruchom grę';
-        startBtn.disabled = false;
-    })
-    .catch(error => {
-        console.error('Błąd ładowania ROMu:', error);
-        loadingStatus.textContent = 'Błąd: Nie znaleziono pliku FireRed.gba w repozytorium.';
-        loadingStatus.style.color = 'red';
-    });
+        if (!response.ok) {
+            throw new Error(`Błąd HTTP: ${response.status}`);
+        }
+        
+        const romBuffer = await response.arrayBuffer();
+        
+        // Konwersja bufora na format wymagany przez dany emulator (często tablica bajtów / Uint8Array)
+        const romBytes = new Uint8Array(romBuffer);
+        
+        console.log("ROM pobrany pomyślnie. Uruchamianie emulatora...");
+        
+        // Tutaj wywołujesz funkcję startową biblioteki emulatora, której używasz.
+        // Przykładowo (zależy od wybranej biblioteki):
+        // 
+        // 1. Inicjalizacja obiektu emulatora:
+        // const gba = new GameBoyAdvance();
+        // 
+        // 2. Wskazanie elementu canvas do renderowania:
+        // gba.setCanvas(document.getElementById('gameboy-canvas'));
+        // 
+        // 3. Załadowanie pamięci ROM i start:
+        // gba.loadROM(romBytes);
+        // gba.run();
 
-// Po kliknięciu uruchamiasz emulator przekazując zmienną romData
-startBtn.addEventListener('click', () => {
-    if (!romData) return;
-    
-    // UKRYJ STATUS / PRZYCISK
-    document.querySelector('.file-loader').style.display = 'none';
-    loadingStatus.style.display = 'none';
+    } catch (error) {
+        console.error("Nie udało się uruchomić gry:", error);
+        alert("Wystąpił problem z wczytaniem pliku gry z repozytorium.");
+    }
+}
 
-    // TUTAJ WYWOŁUJESZ INICJALIZACJE SWOJEGO EMULATORA, np.:
-    // startEmulator(romData); 
-    // (Konkretna funkcja zależy od biblioteki GBA, której używasz w script.js)
+// Uruchomienie po załadowaniu strony
+window.addEventListener('DOMContentLoaded', initEmulator);script.js)
 });
