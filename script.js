@@ -9,7 +9,7 @@ startBtn.addEventListener('click', (e) => {
 
     // Tutaj uruchamiasz emulator
 });
-const romUrl = 'FireRed.gba';
+const romUrl = 'Pokemon - Fire Red Version (U) (V1.1).gba';
 
 async function initEmulator() {
     try {
