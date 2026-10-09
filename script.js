@@ -1,4 +1,14 @@
 // Ścieżka do Twojej gry w repozytorium GitHub Pages
+startBtn.addEventListener('click', (e) => {
+    e.preventDefault(); // Zapobiega przeładowaniu strony
+    if (!romData) return;
+    
+    // Ukrywanie przycisku/statusu
+    document.querySelector('.file-loader').style.display = 'none';
+    loadingStatus.style.display = 'none';
+
+    // Tutaj uruchamiasz emulator
+});
 const romUrl = 'FireRed.gba';
 
 async function initEmulator() {
@@ -38,4 +48,6 @@ async function initEmulator() {
 
 // Uruchomienie po załadowaniu strony
 window.addEventListener('DOMContentLoaded', initEmulator);script.js)
+
+
 });
