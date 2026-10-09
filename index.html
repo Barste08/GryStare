@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Moja Gra z Game Boya</title>
+    <style>
+        body {
+            background-color: #222;
+            color: white;
+            text-align: center;
+            font-family: Arial, sans-serif;
+        }
+        #game-container {
+            margin: 20px auto;
+            max-width: 320px;
+        }
+        canvas {
+            background: #000;
+            border: 4px solid #444;
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+            /* Oryginalna rozdzielczość GB to 160x144, skalujemy ją x2 */
+            width: 320px;
+            height: 288px;
+            image-rendering: pixelated; /* Zachowuje retro wygląd */
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Zagraj w grę z Game Boya!</h1>
+    
+    <div id="game-container">
+        <!-- Ekran gry -->
+        <canvas id="screen" width="160" height="144"></canvas>
+    </div>
+
+    <p>Sterowanie: Strzałki (Krzyżak), Z (Przycisk A), X (Przycisk B), Enter (Start), Shift (Select)</p>
+
+    <!-- Pobieramy gotowy komponent emulatora (np. ze sprawdzonych repozytoriów CDN) -->
+    <script src="https://jsdelivr.net"></script>
+    
+    <script>
+        // Ładowanie pliku ROM i uruchomienie emulatora
+        async function uruchomGre() {
+            const canvas = document.getElementById('screen');
+            
+            // Pobieranie pliku gry (podmień na nazwę swojego pliku!)
+            const odpowiedz = await fetch('mojagra.gb');
+            const arrayBuffer = await odpowiedz.arrayBuffer();
+            const romData = new Uint8Array(arrayBuffer);
+
+            // Inicjalizacja emulatora binjgb
+            const emulator = await Binjgb.load(romData);
+            
+            // Pętla renderująca obraz gry
+            function loop() {
+                emulator.runFrame();
+                emulator.render(canvas);
+                requestAnimationFrame(loop);
+            }
+            
+            // Mapowanie klawiatury na przyciski Game Boya
+            window.addEventListener('keydown', (e) => {
+                if(e.key === 'ArrowUp') emulator.setButtonUp(true);
+                if(e.key === 'ArrowDown') emulator.setButtonDown(true);
+                if(e.key === 'ArrowLeft') emulator.setButtonLeft(true);
+                if(e.key === 'ArrowRight') emulator.setButtonRight(true);
+                if(e.key === 'z' || e.key === 'Z') emulator.setButtonA(true);
+                if(e.key === 'x' || e.key === 'X') emulator.setButtonB(true);
+                if(e.key === 'Enter') emulator.setButtonStart(true);
+                if(e.key === 'Shift') emulator.setButtonSelect(true);
+            });
+
+            window.addEventListener('keyup', (e) => {
+                if(e.key === 'ArrowUp') emulator.setButtonUp(false);
+                if(e.key === 'ArrowDown') emulator.setButtonDown(false);
+                if(e.key === 'ArrowLeft') emulator.setButtonLeft(false);
+                if(e.key === 'ArrowRight') emulator.setButtonRight(false);
+                if(e.key === 'z' || e.key === 'Z') emulator.setButtonA(false);
+                if(e.key === 'x' || e.key === 'X') emulator.setButtonB(false);
+                if(e.key === 'Enter') emulator.setButtonStart(false);
+                if(e.key === 'Shift') emulator.setButtonSelect(false);
+            });
+
+            loop();
+        }
+
+        // Start po załadowaniu strony
+        window.onload = uruchomGre;
+    </script>
+</body>
+</html>
