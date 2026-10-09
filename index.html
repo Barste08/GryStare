@@ -8,8 +8,13 @@
 </head>
 <body>
     <div class="container">
-        <h1>Game Boy Advance Online</h1>
-        
+        <h1>Game Boy Advance Online - Pokémon FireRed</h1>
+
+        <!-- Status ładowania ROMu -->
+        <div id="loading-status" style="margin-bottom: 10px; font-weight: bold; color: #555;">
+            Pobieranie gry z repozytorium...
+        </div>
+
         <!-- Ekran, na którym emulator będzie renderował grafikę -->
         <div id="emulator-container">
             <canvas id="gameboy-canvas" width="240" height="160"></canvas>
@@ -19,14 +24,13 @@
             <p><strong>Sterowanie:</strong> Strzałki = Ruch | Z = A | X = B | Enter = Start | Spacja = Select</p>
         </div>
 
-        <!-- Przycisk do wczytania własnego pliku .gba z dysku (opcjonalnie) -->
-        <div class="file-loader">
-            <label for="rom-upload">Wgraj inny plik .gba:</label>
-            <input type="file" id="rom-upload" accept=".gba">
+        <!-- Opcjonalnie: Przycisk resetu lub startu, jeśli przeglądarka blokuje autostart -->
+        <div class="file-loader" style="margin-top: 15px;">
+            <button id="start-btn" style="padding: 10px 20px; font-size: 16px; cursor: pointer;" disabled>Ładowanie gry...</button>
         </div>
     </div>
 
-    <!-- Skrypty emulatora GBA (np. powszechnie stosowane biblioteki webowe) -->
+    <!-- Skrypty emulatora GBA (upewnij się, że używasz biblioteki np. mGBAJS, IodineGBA lub EmulatorJS) -->
     <script src="script.js"></script>
 </body>
 </html>
